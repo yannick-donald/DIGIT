@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Vidéos</title>
+</head>
+<body>
+    <h1>Gestion des Vidéos</h1>
+
+    <form id="ajouterForm">
+        <label for="lien_video">Lien de la vidéo:</label>
+        <input type="text" id="lien_video" name="lien_video" required>
+        <br>
+        <label for="tags">Tags (séparés par des virgules):</label>
+        <input type="text" id="tags" name="tags" required>
+        <br>
+        <button type="button" onclick="ajouterTags()">Ajouter des tags</button>
+    </form>
+
+    <form id="rechercherForm">
+        <label for="tag_recherche">Rechercher des vidéos par tag:</label>
+        <input type="text" id="tag_recherche" name="tag_recherche" required>
+        <br>
+        <button type="button" onclick="rechercherVideos()">Rechercher</button>
+    </form>
+
+    <p id="status"></p>
+    <p id="result"></p>
+
+    <script>
+        function ajouterTags() {
+            const lienVideo = document.getElementById('lien_video').value;
+            const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
+            localStorage.setItem(lienVideo, JSON.stringify(tags));
+            document.getElementById('status').innerText = `Tags ajoutés pour ${lienVideo}`;
+        }
+
+        function rechercherVideos() {
+            const tagRecherche = document.getElementById('tag_recherche').value;
+            const videosAssociees = Object.keys(localStorage).filter(lien => {
+                const tags = JSON.parse(localStorage.getItem(lien));
+                return tags.includes(tagRecherche);
+            });
+            document.getElementById('result').innerText = `Vidéos associées au tag '${tagRecherche}': ${videosAssociees.join(', ')}`;
+        }
+    </script>
+</body>
+</html>
